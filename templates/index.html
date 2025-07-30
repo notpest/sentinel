@@ -130,6 +130,21 @@
       background-color: #1e40af;
     }
 
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border-left-color: #09f;
+      animation: spin 1s ease infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     @media (max-width: 600px) {
       .upload-button {
         width: 90%;
@@ -174,6 +189,8 @@
       </div>
     </form>
 
+    <div id="spinner" class="spinner" style="display: none;"></div>
+
     <div id="resultBox" style="margin-top: 2rem; display: none; background: #1e293b; padding: 1rem; border-radius: 0.5rem;"></div>
   </div>
 
@@ -199,9 +216,15 @@
   <script>
     const form = document.getElementById("analysisForm");
     const resultBox = document.getElementById("resultBox");
+    const spinner = document.getElementById("spinner");
 
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
+
+      spinner.style.display = "block";
+      resultBox.style.display = "none";
+      resultBox.innerHTML = "";
+
       const formData = new FormData(form);
 
       // Pick one file (audio or video) – priority: video > audio
@@ -212,14 +235,27 @@
       else if (audioFile) formData.set("file", audioFile);
       else formData.delete("file"); // no file
 
-      const response = await fetch("/", {
-        method: "POST",
-        body: formData
-      });
+      try {
+        const response = await fetch("/analyze", {
+          method: "POST",
+          body: formData
+        });
 
-      const data = await response.json();
-      resultBox.style.display = "block";
-      resultBox.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        resultBox.style.display = "block";
+        resultBox.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
+      } catch (error) {
+        resultBox.style.display = "block";
+        resultBox.innerHTML = `<p style="color: #ef4444;">Error: ${error.message}</p>`;
+        console.error("Analysis failed:", error);
+      } finally {
+        spinner.style.display = "none";
+      }
     });
   </script>
 

@@ -61,5 +61,8 @@ def trace_source(text_content: str) -> float:
     
     print(f"   Predicted Source: '{predicted_model_name}' with confidence: {confidence_score:.2f}")
 
-    # Return the confidence score as the result for the heuristic engine
-    return float(confidence_score)
+    # 5. Return both the model name and the score in a dictionary
+    return {
+        'model_name': predicted_model_name,
+        'score': float(confidence_score)
+    }

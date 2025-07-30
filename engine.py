@@ -58,24 +58,10 @@ class UnifiedHeuristicEngine:
             alert_level = "Low Alert"
             headline = "Content shows low indicators of manipulation."
 
-        # Build the explanation based on which models had high scores
-        reasoning = [
-            f"Textual analysis score: {scores['text']:.2f}",
-            f"Visual analysis score: {scores['visual']:.2f}",
-            f"Audio analysis score: {scores['audio']:.2f}",
-            f"Source tracing score: {scores['source']:.2f}",
-            f"Behavioural Anomaly Score: {scores['behavioural']:.2f} (Higher is more anomalous)"
-        ]
-        
-        # This check is now less likely to be triggered, but remains as a fallback.
-        if not reasoning:
-            reasoning.append("No single strong indicator was found; the score is an aggregate of multiple weak signals.")
-
-        # Assemble and return the final response object
         response = {
             'final_score': round(malicious_content_score, 3),
             'alert_level': alert_level,
             'headline': headline,
-            'reasoning': reasoning
+            'component_scores': scores
         }
         return response
