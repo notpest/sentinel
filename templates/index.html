@@ -142,6 +142,7 @@
     }
   </style>
 </head>
+<!-- ...head remains unchanged... -->
 <body>
 
   <!-- Intro -->
@@ -155,24 +156,28 @@
     <h1>SENTINEL</h1>
     <p style="color:#9ca3af; margin-bottom: 2rem;">Upload suspicious content below to analyze.</p>
 
-    <div class="upload-icons">
-      <label for="audioUpload" class="upload-button">🎤<br>Upload Audio
-        <input type="file" id="audioUpload" name="file" accept="audio/*">
-      </label>
+    <form id="analysisForm" enctype="multipart/form-data">
+      <div class="upload-icons">
+        <label for="audioUpload" class="upload-button">🎤<br>Upload Audio
+          <input type="file" id="audioUpload" name="file" accept="audio/*">
+        </label>
 
-      <label for="videoUpload" class="upload-button">🎬<br>Upload Video
-        <input type="file" id="videoUpload" name="file" accept="video/*">
-      </label>
-    </div>
+        <label for="videoUpload" class="upload-button">🎬<br>Upload Video
+          <input type="file" id="videoUpload" name="file" accept="video/*">
+        </label>
+      </div>
 
-    <div class="text-section">
-      <input type="text" id="inputText" placeholder="Enter headline or suspicious text here...">
-      <br>
-      <button onclick="alert('Analyze button clicked')">Analyze</button>
-    </div>
+      <div class="text-section">
+        <input type="text" id="inputText" name="inputText" placeholder="Enter headline or suspicious text here..." required>
+        <br>
+        <button type="submit">Analyze</button>
+      </div>
+    </form>
+
+    <div id="resultBox" style="margin-top: 2rem; display: none; background: #1e293b; padding: 1rem; border-radius: 0.5rem;"></div>
   </div>
 
-  <!-- JS for scroll fade transition -->
+  <!-- Scroll Animation -->
   <script>
     const intro = document.getElementById('introSection');
     const main = document.getElementById('mainContent');
@@ -180,7 +185,6 @@
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
 
-      // Fade out intro
       if (scrollY > 50) {
         intro.style.opacity = '0';
         main.classList.add('show-content');
@@ -190,5 +194,35 @@
       }
     });
   </script>
+
+  <!-- Analysis Submission -->
+  <script>
+    const form = document.getElementById("analysisForm");
+    const resultBox = document.getElementById("resultBox");
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      // Pick one file (audio or video) – priority: video > audio
+      const videoFile = document.getElementById("videoUpload").files[0];
+      const audioFile = document.getElementById("audioUpload").files[0];
+
+      if (videoFile) formData.set("file", videoFile);
+      else if (audioFile) formData.set("file", audioFile);
+      else formData.delete("file"); // no file
+
+      const response = await fetch("/", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+    });
+  </script>
+
 </body>
 </html>
+
