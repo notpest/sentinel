@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SENTINEL - Multimodal Deepfake Detector</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #111827;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Intro Section */
+    .intro {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: opacity 0.6s ease;
+      z-index: 2;
+      position: relative;
+    }
+
+    .intro h1 {
+      font-size: 5rem;
+      font-weight: bold;
+    }
+
+    .intro p {
+      font-size: 1.5rem;
+      margin-top: 0.5rem;
+      color: #9ca3af;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    /* Main Section */
+    .main-content {
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      padding: 4rem 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .show-content {
+      opacity: 1 !important;
+    }
+
+    .upload-icons {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .upload-button {
+      width: 260px;
+      height: 260px;
+      background-color: #2563eb;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.3s ease;
+      margin: 1rem 0;
+    }
+
+    .upload-button:hover {
+      transform: scale(1.05);
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .text-section {
+      text-align: center;
+    }
+
+    .text-section input[type="text"] {
+      width: 100%;
+      max-width: 600px;
+      padding: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      animation: fadeIn 2s ease forwards;
+    }
+
+    .text-section button {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      background-color: #2563eb;
+      border: none;
+      border-radius: 0.5rem;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .text-section button:hover {
+      background-color: #1e40af;
+    }
+
+    @media (max-width: 600px) {
+      .upload-button {
+        width: 90%;
+        height: 200px;
+      }
+
+      .intro h1 {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Intro -->
+  <div class="intro" id="introSection">
+    <h1>SENTINEL</h1>
+    <p>Multimodal Deepfake Detector</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <h1>SENTINEL</h1>
+    <p style="color:#9ca3af; margin-bottom: 2rem;">Upload suspicious content below to analyze.</p>
+
+    <div class="upload-icons">
+      <label for="audioUpload" class="upload-button">🎤<br>Upload Audio
+        <input type="file" id="audioUpload" name="file" accept="audio/*">
+      </label>
+
+      <label for="videoUpload" class="upload-button">🎬<br>Upload Video
+        <input type="file" id="videoUpload" name="file" accept="video/*">
+      </label>
+    </div>
+
+    <div class="text-section">
+      <input type="text" id="inputText" placeholder="Enter headline or suspicious text here...">
+      <br>
+      <button onclick="alert('Analyze button clicked')">Analyze</button>
+    </div>
+  </div>
+
+  <!-- JS for scroll fade transition -->
+  <script>
+    const intro = document.getElementById('introSection');
+    const main = document.getElementById('mainContent');
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+
+      // Fade out intro
+      if (scrollY > 50) {
+        intro.style.opacity = '0';
+        main.classList.add('show-content');
+      } else {
+        intro.style.opacity = '1';
+        main.classList.remove('show-content');
+      }
+    });
+  </script>
+</body>
+</html>

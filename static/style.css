@@ -1,0 +1,125 @@
+body {
+  background-color: #121212;
+  color: #cceeff;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3em;
+  background: linear-gradient(to right, #00d4ff, #0077ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0;
+}
+
+.subtitle {
+  font-size: 1.2em;
+  color: #88cfff;
+  margin-top: 0;
+}
+
+.upload-section,
+.text-section {
+  margin: 30px 0;
+}
+
+input[type="file"],
+input[type="text"] {
+  padding: 10px;
+  margin: 10px;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  color: #cceeff;
+  border-radius: 5px;
+  width: 80%;
+}
+
+button {
+  padding: 10px 20px;
+  background: linear-gradient(to right, #00d4ff, #0077ff);
+  border: none;
+  color: white;
+  border-radius: 10px;
+  margin: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(to right, #0077ff, #00d4ff);
+}
+
+.spinner {
+  border: 6px solid #1e1e1e;
+  border-top: 6px solid #00d4ff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 20px auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#resultBox {
+  display: none;
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: left;
+  color: #d6f7ff;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.upload-icons {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin: 40px 0;
+}
+
+.upload-button {
+  width: 290px;
+  height: 290px;
+  background: #0077ff;
+  color: white;
+  font-size: 2.2em;
+  font-weight: 500;
+  border-radius: 30px;
+  text-align: center;
+  padding: 40px 10px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload-button:hover {
+  background: #005fcc;
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 119, 255, 0.6);
+}
