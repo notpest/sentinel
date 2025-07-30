@@ -2,263 +2,103 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>SENTINEL - Multimodal Deepfake Detector</title>
+  <title>SENTINEL - Deepfake Detector</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      font-family: 'Segoe UI', sans-serif;
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background-color: #111827;
-      color: #ffffff;
-      overflow-x: hidden;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Intro Section */
-    .intro {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      transition: opacity 0.6s ease;
-      z-index: 2;
-      position: relative;
-    }
-
-    .intro h1 {
-      font-size: 5rem;
-      font-weight: bold;
-    }
-
-    .intro p {
-      font-size: 1.5rem;
-      margin-top: 0.5rem;
-      color: #9ca3af;
-      animation: fadeIn 1.5s ease forwards;
-    }
-
-    /* Main Section */
-    .main-content {
-      opacity: 0;
-      transition: opacity 0.8s ease;
-      padding: 4rem 1rem;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .show-content {
-      opacity: 1 !important;
-    }
-
-    .upload-icons {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .upload-button {
-      width: 260px;
-      height: 260px;
-      background-color: #2563eb;
-      color: white;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-radius: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      text-align: center;
-      transition: transform 0.3s ease;
-      margin: 1rem 0;
-    }
-
-    .upload-button:hover {
-      transform: scale(1.05);
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    .text-section {
-      text-align: center;
-    }
-
-    .text-section input[type="text"] {
-      width: 100%;
-      max-width: 600px;
-      padding: 1rem;
-      border: none;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      animation: fadeIn 2s ease forwards;
-    }
-
-    .text-section button {
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      background-color: #2563eb;
-      border: none;
-      border-radius: 0.5rem;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .text-section button:hover {
-      background-color: #1e40af;
-    }
-
-    .spinner {
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border-left-color: #09f;
-      animation: spin 1s ease infinite;
-      margin: 20px auto;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 600px) {
-      .upload-button {
-        width: 90%;
-        height: 200px;
-      }
-
-      .intro h1 {
-        font-size: 3rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<!-- ...head remains unchanged... -->
 <body>
-
-  <!-- Intro -->
-  <div class="intro" id="introSection">
-    <h1>SENTINEL</h1>
-    <p>Multimodal Deepfake Detector</p>
+  <!-- Enhanced Hero Section -->
+  <div class="hero" id="heroSection">
+    <!-- Decorative floating shapes -->
+    <div class="hero-shape one"></div>
+    <div class="hero-shape two"></div>
+    
+    <div class="hero-content">
+      <div class="logo">
+        <span class="logo-icon">🛡️</span>
+        <h1>SENTINEL</h1>
+      </div>
+      <p class="tagline">Advanced Multimodal Deepfake Detection</p>
+      
+      <!-- Enhanced call-to-action -->
+      <div class="hero-cta">
+        <button class="hero-btn" onclick="document.getElementById('mainApp').scrollIntoView({behavior: 'smooth'})">
+          Start Analysis
+          <span class="hero-btn-arrow">→</span>
+        </button>
+      </div>
+      
+      <div class="scroll-indicator" onclick="document.getElementById('mainApp').scrollIntoView({behavior: 'smooth'})">
+        <div class="scroll-arrow"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Main Content -->
-  <div class="main-content" id="mainContent">
-    <h1>SENTINEL</h1>
-    <p style="color:#9ca3af; margin-bottom: 2rem;">Upload suspicious content below to analyze.</p>
-
-    <form id="analysisForm" enctype="multipart/form-data">
-      <div class="upload-icons">
-        <label for="audioUpload" class="upload-button">🎤<br>Upload Audio
-          <input type="file" id="audioUpload" name="file" accept="audio/*">
-        </label>
-
-        <label for="videoUpload" class="upload-button">🎬<br>Upload Video
-          <input type="file" id="videoUpload" name="file" accept="video/*">
-        </label>
+  <!-- Main Application -->
+  <div class="main-app" id="mainApp">
+    <div class="container">
+      <div class="app-header">
+        <h2>Analyze Content</h2>
+        <p>Upload media files or enter text to detect potential deepfakes</p>
       </div>
 
-      <div class="text-section">
-        <input type="text" id="inputText" name="inputText" placeholder="Enter headline or suspicious text here..." required>
-        <br>
-        <button type="submit">Analyze</button>
+      <form id="analysisForm" enctype="multipart/form-data">
+        <!-- Upload Section -->
+        <div class="upload-grid">
+          <div class="upload-card">
+            <label for="audioUpload" class="upload-label">
+              <div class="upload-icon">🎵</div>
+              <span>Audio File</span>
+              <div class="upload-hint">MP3, WAV, M4A</div>
+              <input type="file" id="audioUpload" name="file" accept="audio/*">
+            </label>
+          </div>
+
+          <div class="upload-card">
+            <label for="videoUpload" class="upload-label">
+              <div class="upload-icon">🎬</div>
+              <span>Video File</span>
+              <div class="upload-hint">MP4, AVI, MOV</div>
+              <input type="file" id="videoUpload" name="file" accept="video/*">
+            </label>
+          </div>
+        </div>
+
+        <!-- Text Input Section -->
+        <div class="text-input-section">
+          <div class="input-group">
+            <label for="inputText">Text Analysis</label>
+            <input type="text" id="inputText" name="inputText" 
+                   placeholder="Enter suspicious text or headlines..." required>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+          <button type="submit" class="analyze-btn">
+            <span class="btn-text">Analyze Content</span>
+            <span class="btn-icon">→</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Loading State -->
+      <div id="loadingState" class="loading-state" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Analyzing content...</p>
       </div>
-    </form>
 
-    <div id="spinner" class="spinner" style="display: none;"></div>
-
-    <div id="resultBox" style="margin-top: 2rem; display: none; background: #1e293b; padding: 1rem; border-radius: 0.5rem;"></div>
+      <!-- Results -->
+      <div id="resultSection" class="result-section" style="display: none;">
+        <div class="result-header">
+          <h3>Analysis Results</h3>
+        </div>
+        <div id="resultContent" class="result-content"></div>
+      </div>
+    </div>
   </div>
 
-  <!-- Scroll Animation -->
-  <script>
-    const intro = document.getElementById('introSection');
-    const main = document.getElementById('mainContent');
-
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-
-      if (scrollY > 50) {
-        intro.style.opacity = '0';
-        main.classList.add('show-content');
-      } else {
-        intro.style.opacity = '1';
-        main.classList.remove('show-content');
-      }
-    });
-  </script>
-
-  <!-- Analysis Submission -->
-  <script>
-    const form = document.getElementById("analysisForm");
-    const resultBox = document.getElementById("resultBox");
-    const spinner = document.getElementById("spinner");
-
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      spinner.style.display = "block";
-      resultBox.style.display = "none";
-      resultBox.innerHTML = "";
-
-      const formData = new FormData(form);
-
-      // Pick one file (audio or video) – priority: video > audio
-      const videoFile = document.getElementById("videoUpload").files[0];
-      const audioFile = document.getElementById("audioUpload").files[0];
-
-      if (videoFile) formData.set("file", videoFile);
-      else if (audioFile) formData.set("file", audioFile);
-      else formData.delete("file"); // no file
-
-      try {
-        const response = await fetch("/analyze", {
-          method: "POST",
-          body: formData
-        });
-
-        if (!response.ok) {
-          throw new Error(`Server error: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        resultBox.style.display = "block";
-        resultBox.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-
-      } catch (error) {
-        resultBox.style.display = "block";
-        resultBox.innerHTML = `<p style="color: #ef4444;">Error: ${error.message}</p>`;
-        console.error("Analysis failed:", error);
-      } finally {
-        spinner.style.display = "none";
-      }
-    });
-  </script>
-
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
-
