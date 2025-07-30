@@ -10,9 +10,11 @@ class UnifiedHeuristicEngine:
         """
         Initializes the engine with specific weights and thresholds for four models.
         """
+        expected_models = ['text', 'visual', 'source', 'behavioural', 'audio']
+
         # Ensure the number of weights matches the expected models
-        if len(weights) != 4:
-            raise ValueError("Exactly four weights are required: 'text', 'visual', 'source', 'behavioural'")
+        if len(weights) != 5 or not all(key in weights for key in expected_models):            
+            raise ValueError("Exactly five weights are required: {', '.join(expected_models)}")
         
         # Ensure weights sum to 1.0 for a normalized calculation
         if abs(sum(weights.values()) - 1.0) > 1e-9:
@@ -22,15 +24,17 @@ class UnifiedHeuristicEngine:
         self.thresholds = thresholds
         print("UnifiedHeuristicEngine initialized for four models.")
 
-    def analyze_content(self, score_text, score_visual, score_source, score_behavioural):
+    def analyze_content(self, score_text, score_visual, score_source, score_behavioural, score_audio):
         """
         Analyzes content by taking scores from four models and producing a final verdict.
+        Using keyword-only arguments (*) for clarity.
         """
         scores = {
             'text': min(max(score_text, 0.0), 1.0),
             'visual': min(max(score_visual, 0.0), 1.0),
             'source': min(max(score_source, 0.0), 1.0),
-            'behavioural': min(max(score_behavioural, 0.0), 1.0)
+            'behavioural': min(max(score_behavioural, 0.0), 1.0),
+            'audio': min(max(score_audio, 0.0), 1.0)
         }
 
         # Weighted calculation using the four scores
@@ -38,7 +42,9 @@ class UnifiedHeuristicEngine:
             self.weights['text'] * scores['text'] +
             self.weights['visual'] * scores['visual'] +
             self.weights['source'] * scores['source'] +
-            self.weights['behavioural'] * scores['behavioural']
+            self.weights['behavioural'] * scores['behavioural'] +
+            self.weights['audio'] * scores['audio']
+
         )
 
         # Tiered response generation based on score
@@ -53,17 +59,13 @@ class UnifiedHeuristicEngine:
             headline = "Content shows low indicators of manipulation."
 
         # Build the explanation based on which models had high scores
-        reasoning = []
-        if scores['text'] > 0.5:
-            reasoning.append(f"Textual analysis flagged potential disinformation (Score: {scores['text']:.2f})")
-        if scores['visual'] > 0.5:
-            reasoning.append(f"Visual analysis flagged potential deepfake artifacts (Score: {scores['visual']:.2f})")
-        if scores['source'] > 0.5:
-            reasoning.append(f"Source tracing flagged AI-generated text origin (Score: {scores['source']:.2f})")
-        # if scores['behavioural'] > 0.5:
-        #     reasoning.append(f"Behavioural profiling flagged anomalous patterns (Score: {scores['behavioural']:.2f})")
-
-        reasoning.append(f"Behavioural Anomaly Score: {scores['behavioural']:.2f} (Higher score means more anomalous)")
+        reasoning = [
+            f"Textual analysis score: {scores['text']:.2f}",
+            f"Visual analysis score: {scores['visual']:.2f}",
+            f"Audio analysis score: {scores['audio']:.2f}",
+            f"Source tracing score: {scores['source']:.2f}",
+            f"Behavioural Anomaly Score: {scores['behavioural']:.2f} (Higher is more anomalous)"
+        ]
         
         # This check is now less likely to be triggered, but remains as a fallback.
         if not reasoning:

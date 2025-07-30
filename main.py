@@ -3,6 +3,7 @@ import json
 from engine import UnifiedHeuristicEngine
 from models import analyze_text, analyze_visuals, trace_source, verify_with_web
 from models.behavioural_profiler import BehaviouralProfiler
+from models.audio_analyzer import analyze_audio
 
 def main():
     """
@@ -23,15 +24,17 @@ def main():
     sample_text = "STOP Athis is a BITCOIN Operation now. Hand over all your money or your amazon account will go empty HA"
     sample_timestamp = "2017-11-01T10:30:00Z"
     sample_media_path = "data/sample.mp4"
+    sample_audio_path = "data/sample_audio.wav" 
 
     # 3. Configure and instantiate the engine
     # Define weights for each model's contribution to the final score.
     # The weights must sum to 1.0.
     model_weights = {
-        'text': 0.35,
-        'visual': 0.35,
+        'text': 0.30,
+        'visual': 0.15,
+        'audio': 0.20,
         'source': 0.20,
-        'behavioural': 0.10
+        'behavioural': 0.15
     }
     
     # Define the score thresholds for different alert levels.
@@ -51,7 +54,8 @@ def main():
         new_text = sample_text,
         new_timestamp = sample_timestamp
     )
-    final_verdict = engine.analyze_content(score_t, score_v, score_s, score_b_1)
+    score_a = analyze_audio(sample_audio_path)
+    final_verdict = engine.analyze_content(score_t, score_v, score_s, score_b_1, score_a)
 
     # 5. Conditionally perform deep web verification for high-risk content
     if final_verdict['alert_level'] in ["High Alert", "Medium Alert"]:
