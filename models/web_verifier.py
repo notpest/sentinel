@@ -5,7 +5,7 @@ from duckduckgo_search import DDGS
 # --- API Key Configuration ---
 try:
     # Load the API key from environment variables for better security
-    api_key = os.getenv('GOOGLE_API_KEY')
+    api_key = "AIzaSyAIWcChy_lSnXmorjKIX_E7ClMC4iVTP7U"
     if not api_key:
         raise ValueError("GOOGLE_API_KEY environment variable not set.")
     genai.configure(api_key=api_key)

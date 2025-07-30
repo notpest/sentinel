@@ -21,7 +21,7 @@ def main():
 
     # 2. Define sample input data for a realistic test
     sample_author_id = "AmazonHelp"
-    sample_text = "STOP Athis is a BITCOIN Operation now. Hand over all your money or your amazon account will go empty HA"
+    sample_text = "Tom Cruise and Shah Rukh Khan Announce Joint Mission to Colonize Mars on a Private Rocket Built in a Garage."
     sample_timestamp = "2017-11-01T10:30:00Z"
     sample_media_path = "data/sample.mp4"
     sample_audio_path = "data/sample_audio.wav" 
@@ -61,7 +61,6 @@ def main():
     if final_verdict['alert_level'] in ["High Alert", "Medium Alert"]:
         print("\n--- High-Risk Content Detected: Performing Deep Web Verification ---")
         web_evidence_report = verify_with_web(sample_text)
-        # Add the web verification report to our final output
         final_verdict['web_verification'] = web_evidence_report
 
     # 6. Print the final, structured result
@@ -69,17 +68,17 @@ def main():
     print(json.dumps(final_verdict, indent=2))
 
     # # --- Test Case 2: Second tweet from 'AmazonHelp' immediately after ---
-    # print("\n--- [Analysis 2] Starting Content Analysis for a user already in cache ---")
+    print("\n--- [Analysis 2] Starting Content Analysis for a user already in cache ---")
     
-    # score_b_2 = profiler.analyze(
-    #     author_id="AmazonHelp",
-    #     new_text="Sorry to hear of the trouble. We have responded to your Direct Message. We'll see you there!",
-    #     new_timestamp="2017-11-01T10:35:00Z"
-    # )
+    score_b_2 = profiler.analyze(
+        author_id="AmazonHelp",
+        new_text="Sorry to hear of the trouble. We have responded to your Direct Message. We'll see you there!",
+        new_timestamp="2017-11-01T10:35:00Z"
+    )
 
-    # final_verdict_2 = engine.analyze_content(score_t, score_v, score_s, score_b_2)
-    # print("\n--- VERDICT 2 ---")
-    # print(json.dumps(final_verdict_2, indent=2))
+    final_verdict_2 = engine.analyze_content(score_t, score_v, score_s, score_b_2, score_a)
+    print("\n--- VERDICT 2 ---")
+    print(json.dumps(final_verdict_2, indent=2))
 
     # 7. Save the updated profiles back to the file for persistence
     profiler.save_profiles()
