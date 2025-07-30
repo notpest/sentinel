@@ -1,27 +1,20 @@
+# In file: main.py
 import json
 from engine import UnifiedHeuristicEngine
 from models import analyze_text, analyze_visuals, trace_source, verify_with_web
 from models.behavioural_profiler import BehaviouralProfiler
 from models.audio_analyzer import analyze_audio
 
-def run_analysis(text="", media_path="", author_id="AmazonHelp", timestamp="2017-11-01T10:30:00Z"):
+def main():
     """
-    Main callable function for the multi-modal misinformation detection system.
-
-    Parameters:
-    - text (str): The text input to analyze.
-    - media_path (str): Path to the media file (video/audio) to analyze.
-    - author_id (str): ID of the user/author for behavioral profiling.
-    - timestamp (str): Timestamp of the content (ISO 8601 format).
-
-    Returns:
-    - dict: Final analysis verdict including alert level and optional web verification.
+    Main function to run the multi-modal misinformation detection system.
     """
+    print("--- Initializing Misinformation Analysis System ---")
+    
+    # 1. Instantiate the Online Behavioural Profiler
+    # It will load 'online_profiles.joblib' if it exists, otherwise start fresh.
     try:
-        profiler = BehaviouralProfiler(
-            history_data_path="data/twcs.csv",
-            profile_state_path="assets/online_profiles.joblib"
-        )
+        profiler = BehaviouralProfiler(history_data_path="data/twcs.csv", profile_state_path="assets/online_profiles.joblib")
     except FileNotFoundError as e:
         print(f"Fatal Error: {e}")
         return
@@ -43,11 +36,10 @@ def run_analysis(text="", media_path="", author_id="AmazonHelp", timestamp="2017
         'source': 0.20,
         'behavioural': 0.15
     }
-
-    # Define alert thresholds
+    
+    # Define the score thresholds for different alert levels.
     alert_thresholds = {'medium': 0.4, 'high': 0.75}
 
-    # Initialize engine
     engine = UnifiedHeuristicEngine(weights=model_weights, thresholds=alert_thresholds)
 
     print("\n--- Starting Content Analysis ---")
@@ -65,12 +57,32 @@ def run_analysis(text="", media_path="", author_id="AmazonHelp", timestamp="2017
     score_a = analyze_audio(sample_audio_path)
     final_verdict = engine.analyze_content(score_t, score_v, score_s, score_b_1, score_a)
 
-    # Optionally verify on web
-    if final_verdict['alert_level'] in ["High Alert", "Medium Alert"] and text:
-        web_evidence_report = verify_with_web(text)
+    # 5. Conditionally perform deep web verification for high-risk content
+    if final_verdict['alert_level'] in ["High Alert", "Medium Alert"]:
+        print("\n--- High-Risk Content Detected: Performing Deep Web Verification ---")
+        web_evidence_report = verify_with_web(sample_text)
+        # Add the web verification report to our final output
         final_verdict['web_verification'] = web_evidence_report
 
-    # Persist updated profiles
+    # 6. Print the final, structured result
+    print("\n--- VERDICT 1 ---")
+    print(json.dumps(final_verdict, indent=2))
+
+    # # --- Test Case 2: Second tweet from 'AmazonHelp' immediately after ---
+    # print("\n--- [Analysis 2] Starting Content Analysis for a user already in cache ---")
+    
+    # score_b_2 = profiler.analyze(
+    #     author_id="AmazonHelp",
+    #     new_text="Sorry to hear of the trouble. We have responded to your Direct Message. We'll see you there!",
+    #     new_timestamp="2017-11-01T10:35:00Z"
+    # )
+
+    # final_verdict_2 = engine.analyze_content(score_t, score_v, score_s, score_b_2)
+    # print("\n--- VERDICT 2 ---")
+    # print(json.dumps(final_verdict_2, indent=2))
+
+    # 7. Save the updated profiles back to the file for persistence
     profiler.save_profiles()
 
-    return final_verdict
+if __name__ == "__main__":
+    main()
